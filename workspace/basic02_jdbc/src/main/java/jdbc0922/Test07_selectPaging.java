@@ -5,12 +5,12 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class Test05_selectLike { 
+public class Test07_selectPaging { 
 	public static void main(String[] args) {
-		//Like 연산자 연습
-		//문제) 이름에 '나' 문자 있는 행을 조회하시오
-		String col ="uname"; //검색칼럼 keyfield
-		String word="나"; //검색어 keyword
+		//페이징
+		//문제) sungjuk테이블에서 이름순으로 정렬 후 행번호 4~6만 조회하시오
+		int start=4;
+		int end=6;
 	
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -26,43 +26,36 @@ public class Test05_selectLike {
 			System.out.println("오라클 서버 연결 성공!");
 					
 			StringBuilder sql = new StringBuilder();
-			sql.append(" SELECT sno, uname, kor, eng, mat, tot, aver, addr, wdate ");
-			sql.append(" FROM sungjuk ");
-			
-			//검색어 존재하는지?
-			if(word.length()>0) {
-				//where uname like '%나%'
-				String where=" WHERE " + col + " LIKE '%" + word + "%' ";
-				sql.append(where);
-				
-			}//if end
-			
-			sql.append(" ORDER BY sno DESC ");
-			//System.out.println(sql.toString());
+			sql.append(" SELECT * ");
+			sql.append(" FROM ( ");
+			sql.append(" 	  SELECT uname, aver, addr, rownum AS rnum ");
+			sql.append(" 	  FROM ( ");
+			sql.append(" 		    SELECT uname, aver, addr ");
+			sql.append(" 		    FROM sungjuk ");
+			sql.append(" 		    ORDER BY uname ");
+			sql.append(" 		   ) ");
+			sql.append(" ) ");
+			sql.append(" WHERE rnum>=? AND rnum<=? ");
 
-			pstmt=con.prepareStatement(sql.toString());
-			rs=pstmt.executeQuery();
+			pstmt = con.prepareStatement(sql.toString());//SQL문 변환 명령어
+			pstmt.setInt(1, start);			
+			pstmt.setInt(2, end);			
 			
+			rs=pstmt.executeQuery();//select문 실행			
 			if(rs.next()) {	//cursor가 있는지?
 				System.out.println("자료 있음~");
 				do {
-					System.out.print(rs.getInt("sno") + " ");
+					System.out.print(rs.getInt("rnum") + " ");
 					System.out.print(rs.getString("uname") + " ");
-					System.out.print(rs.getInt("kor") + " ");
-					System.out.print(rs.getInt("eng") + " ");
-					System.out.print(rs.getInt("mat") + " ");
-					System.out.print(rs.getInt("tot") + " ");
 					System.out.print(rs.getInt("aver") + " ");
 					System.out.print(rs.getString("addr") + " ");
-					System.out.print(rs.getString("wdate") + " ");
 					System.out.println();//한줄 끝나면 줄바꿈
-				}while(rs.next());//다음 cursor가 있는지? true->반복				
+				}while(rs.next());//다음 cursor가 있는지? true->반복
 			}else {
 				System.out.println("자료 없음!");
 			}//if end
 
-			
-			
+
 		} catch (Exception e) {
 			System.out.println("오라클 DB 연결 실패 : " + e);
 		} finally {	//자원반납(순서주의)

@@ -47,7 +47,80 @@ from sungjuk
 where uname like '%나%';
 
 
+--문제) 학번 g1001이 수강신청한 과목을 과목코드별로 조회하시오
+/*
+		g1001  p001  OOP
+		g1001  p003  JSP
+		g1001  d001  웹표준
+*/
+--1) 수강테이블 + 과목테이블과 조인하기
+select SU.hakno, SU.gcode, gname
+from tb_sugang SU join tb_gwamok GW
+on SU.gcode = GW.gcode;
 
+--2) 학번 g1001이 수강신청한 과목 조회하기
+select SU.hakno, SU.gcode, gname
+from tb_sugang SU join tb_gwamok GW
+on SU.gcode = GW.gcode
+where SU.hakno='g1001'
+order by SU.gcode DESC;
+
+
+--페이징
+--문제) sungjuk테이블에서 이름순으로 정렬 후 행번호 4~6만 조회하시오
+1)
+select uname, aver, addr
+from sungjuk
+order by uname;
+
+2)rownum도 같이 정렬된다
+select uname, aver, addr, rownum
+from sungjuk
+order by uname;
+
+3) 1)의 결과를 한번 더 셀프조인하고, rownum 추가하기
+select uname, aver, addr, rownum as rnum
+from (
+	  select uname, aver, addr
+	  from sungjuk
+	  order by uname
+	 );
+
+4) 행번호 4~6행 조회하기 (결과:조회되지 않음)
+select uname, aver, addr, rownum as rnum
+from (
+	  select uname, aver, addr
+	  from sungjuk
+	  order by uname
+	 )
+where rnum>=4 and rnum<=6;
+
+
+5) 3)의 내용을 한번 더 셀프조인하고 행번호 4~6행 조회하기
+select *
+from (
+	  select uname, aver, addr, rownum as rnum
+	  from (
+		    select uname, aver, addr
+		    from sungjuk
+		    order by uname
+		   )
+)
+where rnum>=4 and rnum<=6;
+
+
+
+
+select *
+from(
+		select sno, uname, kor, eng, mat, addr, tot, aver, wdate, rownum as rnum
+		from (
+			  select *
+			  from sungjuk
+			  order by uname
+			 ) AA
+) BB
+where rnum>=4 and rnum<=6;
 
 
 
