@@ -176,7 +176,7 @@ public class SungjukDAO { //Data Access Object
 	}//delete() end
 	
 	
-	public int update(SungjukDTO dto) {
+	public int updateproc(SungjukDTO dto) {
 		int cnt=0; //성공 또는 실패 여부 변환
 		try {
 			con=dbopen.getConnection(); //DB연결
@@ -189,7 +189,7 @@ public class SungjukDAO { //Data Access Object
 			sql.append(" , mat=? ");
 			sql.append(" , aver=? ");
 			sql.append(" , addr=? ");
-			sql.append(" , wdate=sysdate ");
+			sql.append(" , wdate=sysdate "); //입력일을 수정일로
 			sql.append(" WHERE sno=? ");
 
 			pstmt=con.prepareStatement(sql.toString());

@@ -19,13 +19,11 @@
 	int sno=Integer.parseInt(request.getParameter("sno"));
 	dto=dao.read(sno);
 	if(dto==null){
-		out.println("<tr>");
-		out.println("	<td colspan='2'>글없음!!</td>");
-		out.println("</tr>");
+		out.println("해당 글 없음!!");
 	}else{
 %>
 		<form name="sungjukfrm" id="sungjukfrm" method="post" action="sungjukUpdateProc.jsp">
-			<input type="hidden" name="sno" value="<%=sno%>">
+			<input type="hidden" name="sno" value="<%=sno%>"><!-- 수정하고자 하는 글번호 -->
 			<table class="table table-hover">
 			<tr>
 			  <th style="padding: 15px;">이름</th>

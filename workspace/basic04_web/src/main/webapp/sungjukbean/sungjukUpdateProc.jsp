@@ -17,7 +17,7 @@
 	int kor     =Integer.parseInt(request.getParameter("kor").trim());
 	int eng     =Integer.parseInt(request.getParameter("eng").trim());
 	int mat     =Integer.parseInt(request.getParameter("mat").trim());
-	String addr =request.getParameter("addr").trim();
+	String addr =request.getParameter("addr");
 	int aver=(kor+eng+mat)/3;
 
 	//전달값을 모두 dto 객체에 담기
@@ -29,7 +29,7 @@
 	dto.setAver(aver);
 	dto.setAddr(addr);
 	
-	int cnt=dao.update(dto);	
+	int cnt=dao.updateproc(dto);	
 	
 	if(cnt==0) {//실패시
 		out.println("<p>성적 수정이 실패했습니다!!</p>");
