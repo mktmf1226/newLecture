@@ -15,6 +15,7 @@
   <!-- 주의사항 : CSS와 JS는 각 웹브라우저에서 쿠키삭제하고 확인할것 -->
   <!-- layout.css import -->
   <link rel="stylesheet" href="../css/layout.css">
+  <script src="../js/myscript.js"></script>
 </head>
 <body>
 
@@ -27,7 +28,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>                        
       </button>
-      <a class="navbar-brand" href="<%=request.getContextPath()%>/index.jsp">HOME</a>
+      <a class="navbar-brand" href="<%=request.getContextPath()%>/index2.jsp">HOME</a>
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav navbar-right">

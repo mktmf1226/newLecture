@@ -3,6 +3,7 @@ package net.bbs;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 import net.bbs.BbsDTO;
 import net.utility.DBClose;
@@ -49,13 +50,176 @@ public class BbsDAO {
 	}//create() end	
 	
 	
+	public ArrayList<BbsDTO> list(){
+		ArrayList<BbsDTO> list=null; //성공 또는 실패 여부 변환
+		try {
+			con=dbopen.getConnection(); //DB연결
+			
+			sql=new StringBuilder();
+			sql.append(" SELECT bbsno, wname, subject, readcnt, regdt, indent ");
+			sql.append(" FROM tb_bbs ");
+			sql.append(" ORDER BY grpno DESC, ansnum ASC ");
+
+			pstmt=con.prepareStatement(sql.toString());
+			rs=pstmt.executeQuery();//select문 실행
+			
+			if(rs.next()) {	//cursor가 있는지?
+				//전체 행을 저장
+				list=new ArrayList<>();
+				do {
+					//커서가 가리키는 한줄 저장
+					BbsDTO dto=new BbsDTO();
+					dto.setBbsno(rs.getInt("bbsno"));
+					dto.setWname(rs.getString("wname"));
+					dto.setSubject(rs.getString("subject"));
+					dto.setReadcnt(rs.getInt("readcnt"));
+					dto.setRegdt(rs.getString("regdt"));
+					dto.setIndent(rs.getInt("indent"));
+					list.add(dto); //list 저장
+				}while(rs.next());
+			}else {
+				list=null;
+			}//if end
+		}catch (Exception e) {
+			System.out.println("전체목록 불러오기 실패:" + e);
+		}finally {
+			DBClose.close(con, pstmt, rs);
+		}//end
+		return list;	
+	}//list() end
 	
 	
+	public int count() {
+		int cnt=0;
+		try {
+			con=dbopen.getConnection(); //DB연결
+			
+			sql=new StringBuilder();
+			sql.append(" SELECT COUNT(*) as cnt ");
+			sql.append(" FROM tb_bbs ");
+			
+			pstmt=con.prepareStatement(sql.toString());
+			rs=pstmt.executeQuery();//select문 실행			
+			if(rs.next()) {	//cursor가 있는지?
+				cnt=rs.getInt("cnt");
+			}//if end
+		}catch (Exception e) {
+			System.out.println("전체목록 불러오기 실패:" + e);
+		}finally {
+			DBClose.close(con, pstmt, rs);
+		}//end
+		return cnt;
+	}//count() end
 	
 	
+	public BbsDTO read(int bbsno) {
+		BbsDTO dto=null;
+		try {
+			con=dbopen.getConnection(); //DB연결
+			
+			sql=new StringBuilder();
+			sql.append(" SELECT bbsno, wname, subject, content, readcnt, regdt, ip, grpno, indent, ansnum ");
+			sql.append(" FROM tb_bbs ");
+			sql.append(" WHERE bbsno=? ");
+
+			pstmt=con.prepareStatement(sql.toString());
+			pstmt.setInt(1, bbsno);
+			
+			rs=pstmt.executeQuery();//select문 실행			
+			if(rs.next()) {	//cursor가 있는지?
+				dto=new BbsDTO();
+				dto.setBbsno(rs.getInt("bbsno"));
+				dto.setWname(rs.getString("wname"));
+				dto.setSubject(rs.getString("subject"));
+				dto.setContent(rs.getString("content"));
+				dto.setReadcnt(rs.getInt("readcnt"));
+				dto.setRegdt(rs.getString("regdt"));
+				dto.setIp(rs.getString("ip"));
+				dto.setGrpno(rs.getInt("grpno"));
+				dto.setIndent(rs.getInt("indent"));
+				dto.setAnsnum(rs.getInt("ansnum"));
+			}else {
+				dto=null;
+			}//if end
+		}catch (Exception e) {
+			System.out.println("상세보기 실패:" + e);
+		}finally {
+			DBClose.close(con, pstmt, rs);
+		}//end
+		return dto;
+	}//read() end
 	
 	
+	public void incrementCnt(int bbsno) {
+		try {
+			con=dbopen.getConnection(); //DB연결
+
+			sql=new StringBuilder();
+			sql.append(" UPDATE tb_bbs ");
+			sql.append(" SET readcnt=readcnt+1 ");
+			sql.append(" WHERE bbsno=? ");
+
+			pstmt=con.prepareStatement(sql.toString());
+			pstmt.setInt(1, bbsno); // 1 -> 첫번째 물음표, bbsno칼럼
+			pstmt.executeUpdate();
+			
+		}catch (Exception e) {
+			System.out.println("조회수 증가 실패:" + e);
+		}finally {
+			DBClose.close(con, pstmt);
+		}//end
+	}//incrementCnt() end
 	
+	
+	public int delete(BbsDTO dto) {
+		int cnt=0;
+		try {
+			con=dbopen.getConnection(); //DB연결		
+			
+			sql=new StringBuilder();
+			sql.append(" DELETE FROM tb_bbs ");
+			sql.append(" WHERE bbsno=? AND passwd=? ");
+			
+			pstmt = con.prepareStatement(sql.toString());//SQL문 변환 명령어
+			pstmt.setInt(1, dto.getBbsno());
+			pstmt.setString(2, dto.getPasswd());			
+			cnt=pstmt.executeUpdate();
+			
+		}catch (Exception e) {
+			System.out.println("삭제 실패:" + e);
+		}finally {
+			DBClose.close(con, pstmt);
+		}//end
+		return cnt;
+	}//delete() end
+	
+	
+	public int updateproc(BbsDTO dto) {
+		int cnt=0;
+		try {
+			con=dbopen.getConnection(); //DB연결		
+			
+			sql=new StringBuilder();
+			sql.append(" UPDATE tb_bbs ");
+			sql.append(" SET wname=?, subject=?, content=?, ip=? ");
+			sql.append(" WHERE bbsno=? AND passwd=? ");
+			
+			pstmt = con.prepareStatement(sql.toString());//SQL문 변환 명령어
+			pstmt.setString(1, dto.getWname()); 	// 1 -> 첫번째 물음표, wname칼럼
+			pstmt.setString(2, dto.getSubject()); 	// 2 -> 두번째 물음표, subject칼럼
+			pstmt.setString(3, dto.getContent()); 	// 3 -> 세번째 물음표, content칼럼
+			pstmt.setString(4, dto.getIp()); 		// 4 -> 네번째 물음표, ip칼럼
+			pstmt.setInt(5, dto.getBbsno());
+			pstmt.setString(6, dto.getPasswd());			
+			cnt=pstmt.executeUpdate();
+			
+		}catch (Exception e) {
+			System.out.println("삭제 실패:" + e);
+		}finally {
+			DBClose.close(con, pstmt);
+		}//end
+		return cnt;
+	}//updateProc() end
 	
 	
 }//class end

@@ -15,6 +15,44 @@
   <!-- 주의사항 : CSS와 JS는 각 웹브라우저에서 쿠키삭제하고 확인할것 -->
   <!-- layout.css import -->
   <link rel="stylesheet" href="./css/layout.css">
+  <!-- polarClockIns.css import -->
+  <link rel="stylesheet" type="text/css" href="./css/polarClockIns.css">
+  <script src="./js/myscript.js"></script>
+  <script>    		
+	  function showtimeclock(){
+	      const d=new Date();                     //const 상수화. 값을 못바꾼다
+	      let today="";
+	      today += d.getFullYear() + ".";         //2022.
+	      if(d.getMonth()+1<10)today += "0";
+	      today += (d.getMonth()+1)+".";          //2022.08.
+	      if(d.getDate()<10)today += "0";
+	      today += d.getDate();                   //2022.08.10
+	      switch(d.getDay()){
+	          case 0: today+=" (일) "; break;
+	          case 1: today+=" (월) "; break;
+	          case 2: today+=" (화) "; break;
+	          case 3: today+=" (수) "; break;
+	          case 4: today+=" (목) "; break;
+	          case 5: today+=" (금) "; break;
+	          case 6: today+=" (토) "; break;
+	      }                                       //2022.08.10 (수)         
+	      if(d.getHours()<12){today += "am "}else{today += "pm "};                                //2022.08.10 (수) pm 
+	      if(d.getHours()<13){today += d.getHours()+ ":"}else{today += (d.getHours()-12)+ ":"};   //2022.08.10 (수) pm 4:
+	      if(d.getMinutes()<10)today += "0";      
+	      today += d.getMinutes()+ ":";           //2022.08.10 (수) pm 4:17:
+	      if(d.getSeconds()<10)today += "0";
+	      today += d.getSeconds();                //2022.08.10 (수) pm 4:17:20
+	
+	      document.getElementById("digitclock").innerText=today;
+	      timer=setTimeout(showtimeclock, 1000);             //1초 후에 showtimeclock 함수를 호출
+	  }//showtimeclock() end
+	
+	  let timer; //전역변수	        
+	
+	  function killtimeclock(){
+	      clearTimeout(timer);    //시간해제
+	  }//killtimeclock() end
+  </script>
 </head>
 <body onload="showtimeclock()">
 
@@ -53,47 +91,20 @@
     <div class="col-xs-12">
     	<!-- 본문시작 -->
     		
-    		<script>
-    		
-	        function showtimeclock(){
-	            const d=new Date();                     //const 상수화. 값을 못바꾼다
-	            let today="";
-	            today += d.getFullYear() + ".";         //2022.
-	            if(d.getMonth()+1<10)today += "0";
-	            today += (d.getMonth()+1)+".";          //2022.08.
-	            if(d.getDate()<10)today += "0";
-	            today += d.getDate();                   //2022.08.10
-	            switch(d.getDay()){
-	                case 0: today+=" (일) "; break;
-	                case 1: today+=" (월) "; break;
-	                case 2: today+=" (화) "; break;
-	                case 3: today+=" (수) "; break;
-	                case 4: today+=" (목) "; break;
-	                case 5: today+=" (금) "; break;
-	                case 6: today+=" (토) "; break;
-	            }                                       //2022.08.10 (수)         
-	            if(d.getHours()<12){today += "am "}else{today += "pm "};                                //2022.08.10 (수) pm 
-	            if(d.getHours()<13){today += d.getHours()+ ":"}else{today += (d.getHours()-12)+ ":"};   //2022.08.10 (수) pm 4:
-	            if(d.getMinutes()<10)today += "0";      
-	            today += d.getMinutes()+ ":";           //2022.08.10 (수) pm 4:17:
-	            if(d.getSeconds()<10)today += "0";
-	            today += d.getSeconds();                //2022.08.10 (수) pm 4:17:20
-	
-	            document.getElementById("digitclock").innerText=today;
-	            timer=setTimeout(showtimeclock, 1000);             //1초 후에 showtimeclock 함수를 호출
-	        }//showtimeclock() end
-	
-	        let timer; //전역변수	        
-	
-	        function killtimeclock(){
-	            clearTimeout(timer);    //시간해제
-	        }//killtimeclock() end
-	    </script>
 	    
         <h3>현재 시간은</h3>
         <div id="digitclock"></div>
-        
+        <h3>Polar Clock</h3>
+        <div class="container-fluid">
+	        <script type="module">
+			import define from "./js/polarClockIndex.js";
+			import {Runtime, Inspector} from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
 
+			const runtime = new Runtime();
+			alert( document.body.childNodes.length );
+			const main = runtime.module(define, Inspector.into(document.body.childNodes[12]));
+			</script>
+		</div><!-- [12]:container bg-2 [17]:footer -->
     	<!-- 본문끝 -->
     </div><!--  col 끝 -->
   </div><!-- row 끝 -->

@@ -1,6 +1,14 @@
 --bbs.sql
 --답변 및 댓글형 게시판
 
+--오라클 콘솔창 예쁘게 출력하기
+set linesize 1800;
+col wname for a10;
+col subject for a10; 
+col content for a20; 
+col ip for a10; 
+col passwd for a10; 
+
 --테이블 삭제
 drop table tb_bbs;
 
@@ -54,13 +62,28 @@ insert into tb_bbs(bbsno, wname, subject, content, passwd, ip, grpno)
 values (bbs_seq.nextval, ?, ?, ?, ?, ?, (select nvl(max(bbsno),0)+1 from tb_bbs));
 
 
+--전체목록
+select bbsno, wname, subject, readcnt, regdt, indent
+from tb_bbs
+order by grpno desc, ansnum asc;
 
 
+--상세보기
+select * from tb_bbs where bbsno=?
 
 
+--행삭제
+delete from tb_bbs where bbsno=? and psswd=?
 
 
+--행수정
+update tb_bbs set wname=?, subject=?, content=?, ip=?
+where bbsno=? and passwd=?
 
+
+--조회수 증가
+update tb_bbs set readcnt=readcnt+1
+where bbsno=?
 
 
 
