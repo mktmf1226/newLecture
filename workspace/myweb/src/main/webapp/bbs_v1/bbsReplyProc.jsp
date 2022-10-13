@@ -2,18 +2,10 @@
     pageEncoding="UTF-8"%>
 <%@ include file="ssi.jsp" %>
 <%@ include file="../header.jsp" %>
-<!-- 본문시작 bbsUpdateProc.jsp-->
-<!-- 수정 요청한 정보를 가져와서, DB에 가서 행 수정하기 -->
-<h3>* 글수정 *</h3>
-<p>
-	<a href="bbsForm.jsp">[글쓰기]</a>
-	&nbsp;&nbsp;
-	<a href="bbsList.jsp">[글목록]</a>
-</p>
-<div class="container">
+<!-- 본문시작 bbsReplyProc.jsp-->
 <%
-	//수정 요청한 정보 가져오기
-	int bbsno=Integer.parseInt(request.getParameter("bbsno"));	
+	//사용자가 입력 요청한 정보를 가져오기
+	int bbsno	  =Integer.parseInt(request.getParameter("bbsno"));//부모글번호
 	String wname  =request.getParameter("wname").trim();
 	String subject=request.getParameter("subject").trim();
 	String content=request.getParameter("content").trim();
@@ -28,17 +20,17 @@
 	dto.setPasswd(passwd);
 	dto.setIp(ip);
 	
-	int cnt=dao.updateproc(dto);
+	int cnt=dao.reply(dto);	
+	
 	if(cnt==0) {//실패시
-		out.println("<p>비밀번호가 일치하지 않습니다!!</p>");
+		out.println("<p>답변쓰기 실패했습니다!!</p>");
 		out.println("<p><a href='javascript:history.back()'>[다시시도]</a></p>");//전단계로 이동
 	}else {//성공시
 		out.println("<script>");
-		out.println("	alert('게시글이 수정되었습니다~');");
+		out.println("	alert('답변글이 추가되었습니다~');");
 		out.println("	location.href='bbsList.jsp';"); //목록페이지 이동
 		out.println("</script>");
 	}//if end
 %>
-</div>
 <!-- 본문끝 -->
 <%@ include file="../footer.jsp" %>

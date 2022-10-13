@@ -62,3 +62,16 @@ function pwCheck(){
 		return false;
 	}//if end
 }//pwCheck() end
+
+
+
+function searchCheck(){
+	//검색어를 입력해야만 서버로 전송
+	let word=document.getElementById("word").value;
+	word=word.trim();
+	if(word.length==0){
+		alert("검색어를 입력해 주세요");
+		return false;
+	}//if end
+	return true;
+}//searchCheck() end

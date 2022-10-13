@@ -214,12 +214,214 @@ public class BbsDAO {
 			cnt=pstmt.executeUpdate();
 			
 		}catch (Exception e) {
-			System.out.println("삭제 실패:" + e);
+			System.out.println("수정 실패:" + e);
 		}finally {
 			DBClose.close(con, pstmt);
 		}//end
 		return cnt;
 	}//updateProc() end
+	
+	
+	public ArrayList<BbsDTO> hotlist(){
+		ArrayList<BbsDTO> hotlist=null; //성공 또는 실패 여부 변환
+		try {
+			con=dbopen.getConnection(); //DB연결
+			
+			sql=new StringBuilder();
+			sql.append(" SELECT bbsno, wname, subject, readcnt ");
+			sql.append(" FROM tb_bbs ");
+			sql.append(" WHERE readcnt>=10 ");
+			sql.append(" ORDER BY readcnt DESC, ansnum ASC ");
+
+			pstmt=con.prepareStatement(sql.toString());
+			rs=pstmt.executeQuery();//select문 실행
+			
+			if(rs.next()) {	//cursor가 있는지?
+				//전체 행을 저장
+				hotlist=new ArrayList<>();
+				do {
+					//커서가 가리키는 한줄 저장
+					BbsDTO dto=new BbsDTO();
+					dto.setBbsno(rs.getInt("bbsno"));
+					dto.setWname(rs.getString("wname"));
+					dto.setSubject(rs.getString("subject"));
+					dto.setReadcnt(rs.getInt("readcnt"));
+					hotlist.add(dto); //list 저장
+				}while(rs.next());
+			}else {
+				hotlist=null;
+			}//if end
+		}catch (Exception e) {
+			System.out.println("인기목록 불러오기 실패:" + e);
+		}finally {
+			DBClose.close(con, pstmt, rs);
+		}//end
+		return hotlist;	
+	}//list() end
+	
+	
+	
+	
+	public ArrayList<BbsDTO> newlist(){
+		ArrayList<BbsDTO> newlist=null; //성공 또는 실패 여부 변환
+		try {
+			con=dbopen.getConnection(); //DB연결
+			
+			sql=new StringBuilder();
+			sql.append(" SELECT bbsno, wname, subject, readcnt ");
+			sql.append(" FROM tb_bbs ");
+			sql.append(" WHERE (months_between(regdt, (select sysdate from dual)))=0 ");
+			sql.append(" ORDER BY regdt DESC, ansnum ASC ");
+			
+			pstmt=con.prepareStatement(sql.toString());
+			rs=pstmt.executeQuery();//select문 실행
+			
+			if(rs.next()) {	//cursor가 있는지?
+				//전체 행을 저장
+				newlist=new ArrayList<>();
+				do {
+					//커서가 가리키는 한줄 저장
+					BbsDTO dto=new BbsDTO();
+					dto.setBbsno(rs.getInt("bbsno"));
+					dto.setWname(rs.getString("wname"));
+					dto.setSubject(rs.getString("subject"));
+					dto.setReadcnt(rs.getInt("readcnt"));
+					newlist.add(dto); //list 저장
+				}while(rs.next());
+			}else {
+				newlist=null;
+			}//if end
+		}catch (Exception e) {
+			System.out.println("새글목록 불러오기 실패:" + e);
+		}finally {
+			DBClose.close(con, pstmt, rs);
+		}//end
+		return newlist;	
+	}//list() end	
+	
+	
+	
+	public int reply(BbsDTO dto) {
+		int cnt=0; //성공 또는 실패 여부 변환
+		try {
+			con=dbopen.getConnection(); //DB연결			
+			sql=new StringBuilder(); //sql문 객체생성
+			
+			//1)부모글 정보 가져오기(select문)
+			int grpno = 0;
+			int indent = 0;
+			int ansnum = 0;
+			sql.append(" SELECT grpno, indent, ansnum ");
+			sql.append(" FROM tb_bbs ");
+			sql.append(" WHERE bbsno=? ");
+			
+			pstmt=con.prepareStatement(sql.toString());
+			pstmt.setInt(1, dto.getBbsno());			
+			rs=pstmt.executeQuery();//select문 실행			
+			if(rs.next()) {	//cursor가 있는지?
+				//그룹번호 : 부모글 그룹번호 그대로 가져오기
+				grpno=rs.getInt("grpno");
+				//들여쓰기 : 부모글 들여쓰기 	+1
+				indent=rs.getInt("indent")+1;
+				//글순서	 : 부모글 글순서	+1
+				ansnum=rs.getInt("ansnum")+1;
+			}//if end
+			
+			//2)글순서 재조정하기(update문)
+			sql.delete(0, sql.length()); //1)단계에서 사용했던 sql값 지우기
+			sql.append(" UPDATE tb_bbs ");
+			sql.append(" SET ansnum=ansnum+1 ");
+			sql.append(" WHERE grpno=? AND ansnum>=? ");			
+			pstmt=con.prepareStatement(sql.toString());
+			pstmt.setInt(1, grpno);			
+			pstmt.setInt(2, ansnum);			
+			pstmt.executeUpdate();			
+			
+
+			//3)답변글 추가하기(insert문)
+			sql.delete(0, sql.length());
+			sql.append(" INSERT INTO tb_bbs(bbsno, wname, subject, content, passwd, ip, grpno, indent, ansnum) ");
+			sql.append(" VALUES (bbs_seq.nextval, ?, ?, ?, ?, ?, ?, ?, ?) ");
+			pstmt=con.prepareStatement(sql.toString());
+			pstmt.setString(1, dto.getWname()); 	// 1 -> 첫번째 물음표, wname칼럼
+			pstmt.setString(2, dto.getSubject()); 	// 2 -> 두번째 물음표, subject칼럼
+			pstmt.setString(3, dto.getContent()); 	// 3 -> 세번째 물음표, content칼럼
+			pstmt.setString(4, dto.getPasswd()); 	// 4 -> 네번째 물음표, passwd칼럼
+			pstmt.setString(5, dto.getIp()); 		// 5 -> 다섯번째 물음표, ip칼럼
+			pstmt.setInt(6, grpno); 				// 6 -> 1)단계에서 만든 그룹번호
+			pstmt.setInt(7, indent); 				// 7 -> 1)단계에서 만든 들여쓰기
+			pstmt.setInt(8, ansnum); 				// 8 -> 1)단계에서 만든 글순서
+			
+			cnt=pstmt.executeUpdate();
+			
+		}catch (Exception e) {
+			System.out.println("답변쓰기 실패:" + e);
+		}finally {
+			DBClose.close(con, pstmt, rs);
+		}//end
+		return cnt;
+	}//replay() end
+	
+	
+	public int count2(String col, String word) {
+		int cnt=0;
+		try {
+			con=dbopen.getConnection();
+			
+			sql=new StringBuilder();
+			sql.append(" SELECT COUNT(*) as cnt ");
+			sql.append(" FROM tb_bbs ");
+			
+			if(word.length()>=1) { //검색어가 존재한다면
+				String search="";
+				if(col.equals("subject_content")) {
+					search += " WHERE subject LIKE '%" + word + "%'";
+					search += " OR    content LIKE '%" + word + "%'";
+				}else if(col.equals("subject")) {
+					search += " WHERE subject LIKE '%" + word + "%'";
+				}else if(col.equals("content")) {
+					search += " WHERE content LIKE '%" + word + "%'";
+				}else if(col.equals("wname")) {
+					search += " WHERE wname LIKE '%" + word + "%'";
+				}//if end
+				sql.append(search);
+			}//if end
+			pstmt=con.prepareStatement(sql.toString());
+			rs=pstmt.executeQuery();//select문 실행
+			if(rs.next()) {
+				cnt=rs.getInt("cnt");//cnt컬럼의 값 반환
+			}//if end
+		}catch (Exception e) {
+			System.out.println("검색 글갯수 실패:" + e);
+		}finally {
+			DBClose.close(con, pstmt, rs);
+		}//end
+		return cnt;
+	}//count2() end
+	
+	
+	public int countchild() {
+		int cnt=0;
+		try {
+			con=dbopen.getConnection();
+			
+			sql=new StringBuilder();
+			sql.append(" SELECT MAX(indent) as cnt ");
+			sql.append(" FROM tb_bbs ");
+			sql.append(" WHERE grpno=? ");
+			
+			pstmt=con.prepareStatement(sql.toString());
+			rs=pstmt.executeQuery();//select문 실행
+			if(rs.next()) {
+				cnt=rs.getInt("cnt");//cnt컬럼의 값 반환
+			}//if end
+		}catch (Exception e) {
+			System.out.println("검색 글갯수 실패:" + e);
+		}finally {
+			DBClose.close(con, pstmt, rs);
+		}//end
+		return cnt;
+	}//countChild() end
 	
 	
 }//class end

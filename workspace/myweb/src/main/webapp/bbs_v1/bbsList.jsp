@@ -10,7 +10,6 @@
 	<thead>
 		<tr>
 			<th style="text-align: left">제목</th>
-			<th class="text-center">답변수</th>
 			<th class="text-center">조회수</th>
 			<th class="text-center">작성자</th>
 			<th class="text-center">작성일</th>
@@ -21,7 +20,7 @@
 	ArrayList<BbsDTO> list=dao.list();
 	if(list==null){
 		out.println("<tr>");
-		out.println("	<td colspan='5'>");
+		out.println("	<td colspan='4'>");
 		out.println("	  <strong>관련자료 없음!!</strong>");
 		out.println("	</td>");
 		out.println("</tr>");
@@ -56,47 +55,18 @@
 					}//if end
 %>
 				</td>
-				<td>
-<%
-					//답변 갯수가 1이상이면 출력
-					int countchild=dao.countchild();
-					if(countchild>=1){
-						out.println(countchild);
-					}//if end
-%>
-				</td>
 				<td><%=dto.getReadcnt()%></td>
 				<td><%=dto.getWname()%></td>
 				<td><%=dto.getRegdt().substring(0,10)%></td>
 			</tr>
 <%
 		}//for end
-		
-		//글갯수
-		int totalRecord=dao.count2(col, word);
+		int totalRecord=dao.count();
 		out.println("<tr>");
 		out.println("	<td colspan='4' style='text-align:center;'>");
 		out.println("	  글갯수:<strong> "+totalRecord +" </strong>");
 		out.println("	</td>");
 		out.println("</tr>");
-%>
-		<!-- 검색 시작 -->
-		<tr>
-			<td colspan="4" style='text-align:center; height:50px;'>
-				<form action="bbsList.jsp" onsubmit="return searchCheck()"><!-- myscript.js에 함수 작성함 -->
-					<select name="col">
-						<option value="subject_content">제목+내용
-						<option value="subject">제목
-						<option value="content">내용
-						<option value="wname">작성자
-					</select>
-					<input type="text" name="word" id="word">
-					<input type="submit" value="검색" class="btn btn-primary">					
-				</form>
-			</td>
-		</tr>
-		<!-- 검색 끝 -->
-<%
 	}//if end
 %>
 	</tbody>

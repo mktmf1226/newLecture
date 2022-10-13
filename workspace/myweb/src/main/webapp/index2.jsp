@@ -1,5 +1,7 @@
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ include file="./bbs/ssi.jsp" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -15,8 +17,6 @@
   <!-- 주의사항 : CSS와 JS는 각 웹브라우저에서 쿠키삭제하고 확인할것 -->
   <!-- layout.css import -->
   <link rel="stylesheet" href="./css/layout.css">
-  <!-- polarClockIns.css import -->
-  <link rel="stylesheet" type="text/css" href="./css/polarClockIns.css">
   <script src="./js/myscript.js"></script>
   <script>    		
 	  function showtimeclock(){
@@ -94,17 +94,85 @@
 	    
         <h3>현재 시간은</h3>
         <div id="digitclock"></div>
-        <h3>Polar Clock</h3>
-        <div class="container-fluid">
-	        <script type="module">
-			import define from "./js/polarClockIndex.js";
-			import {Runtime, Inspector} from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+                
+        <div class="col-xs-6">
+        	<h3>*인기 글*</h3>
+        	<table class="table table-hover">
+			<thead>
+				<tr>
+					<th style="text-align: left">제목</th>
+					<th class="text-center">작성자</th>
+					<th class="text-center">조회수</th>
+				</tr>
+			</thead>
+			<tbody>
+<%
+				ArrayList<BbsDTO> hotlist=dao.hotlist();
+				if(hotlist==null){
+					out.println("<tr>");
+					out.println("	<td colspan='3'>");
+					out.println("	  <strong>관련자료 없음!!</strong>");
+					out.println("	</td>");
+					out.println("</tr>");
+				}else{
+					for(int i=0; i<hotlist.size(); i++){
+						dto=hotlist.get(i);
+%>
+						<tr>
+							<td style="text-align: left">
+								<a href="./bbs/bbsRead.jsp?bbsno=<%=dto.getBbsno()%>"><%=dto.getSubject()%></a>
+								<img src='./images/hot.gif'>
+							</td>
+							<td><%=dto.getWname()%></td>
+							<td><%=dto.getReadcnt()%></td>
+						</tr>
+<%
+					}//for end
+				}//if end
+%>			
+			</tbody>
+			</table>
+        </div><!-- 인기글 끝 -->
+        
+        <div class="col-xs-6">
+        	<h3>*새 글*</h3>
+        	<table class="table table-hover">
+			<thead>
+				<tr>
+					<th style="text-align: left">제목</th>
+					<th class="text-center">작성자</th>
+					<th class="text-center">조회수</th>
+				</tr>
+			</thead>
+			<tbody>
+<%
+				ArrayList<BbsDTO> newlist=dao.newlist();
+				if(newlist==null){
+					out.println("<tr>");
+					out.println("	<td colspan='3'>");
+					out.println("	  <strong>관련자료 없음!!</strong>");
+					out.println("	</td>");
+					out.println("</tr>");
+				}else{
+					for(int i=0; i<newlist.size(); i++){
+						dto=newlist.get(i);
+%>
+						<tr>
+							<td style="text-align: left">
+								<a href="./bbs/bbsRead.jsp?bbsno=<%=dto.getBbsno()%>"><%=dto.getSubject()%></a>
+								<img src='./images/new.gif'>
+							</td>
+							<td><%=dto.getWname()%></td>
+							<td><%=dto.getReadcnt()%></td>
+						</tr>
+<%
+					}//for end
+				}//if end
+%>			
+			</tbody>
+			</table>        
+        </div><!-- 새글 끝 -->
 
-			const runtime = new Runtime();
-			alert( document.body.childNodes.length );
-			const main = runtime.module(define, Inspector.into(document.body.childNodes[12]));
-			</script>
-		</div><!-- [12]:container bg-2 [17]:footer -->
     	<!-- 본문끝 -->
     </div><!--  col 끝 -->
   </div><!-- row 끝 -->

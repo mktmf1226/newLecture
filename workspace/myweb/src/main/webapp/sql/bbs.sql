@@ -86,6 +86,79 @@ update tb_bbs set readcnt=readcnt+1
 where bbsno=?
 
 
+--날짜 차이 구하기 (오늘 날짜면 결과값 0)
+select months_between(regdt, (select sysdate from dual))
+from tb_bbs
+order by regdt desc;
+
+select bbsno, wname, subject, readcnt
+from tb_bbs
+where (months_between(regdt, (select sysdate from dual)))=0;
+
+
+
+[답변쓰기 알고리즘]
+
+- 새글 쓰기 : 최초의 부모글
+- 답변 쓰기 : 자식글
+
+- 그룹번호(grpno	) : 부모글 그룹번호와 동일하게
+- 들여쓰기(indent	) : 부모글 들여쓰기	+ 1
+- 글순서	(ansnum	) : 부모글 글순서	+ 1 한 후, 글순서 재조정
+
+
+- 그룹번호(grpno) 계산식 : select nvl(max(bbsno),0)+1 from tb_bbs;
+
+번호  제목			그룹번호 들여쓰기 글순서
+1    제주도			1	   0	  0
+2	 서울시			2	   0	  0
+	 ▶종로구			2	   1	  1
+	 ▷▷관철동		2      2      2
+	 ▷▷▶보신각		2      3      3
+	 ▷▷인사동		2	   2      2 (-> 3)(-> 4)
+	 ▶강남구			2	   1      1 (-> 2)(-> 3)(-> 4)(-> 5)
+	 ▷▷도곡동		2	   2      2 (-> 6)
+	 ▷▷역삼동		2      2      2 (-> 6)(-> 7)
+	 ▶마포구			2	   1	  1 (-> 8)
+3	 부산시			3	   0      0
+
+
+- 글순서(ansnum) 재조정
+update tb_bbs
+set ansnum=ansnum+1
+where grpno=2 and ansnum>=6
+////////////////////////////////////////////////////////////////////////
+
+[검색]
+-- 제목+내용에서 '파스타'가 있는지 검색
+where subject like '%파스타%' or content like '%파스타%'
+
+-- 제목에서 '파스타'가 있는지 검색
+where subject like '%파스타%'
+
+-- 내용에서 '파스타'가 있는지 검색
+where content like '%파스타%'
+
+-- 작성자에서 '파스타'가 있는지 검색
+where wname like '%파스타%'
+
+
+
+[과제] 제목과 댓글(자식글)의 갯수를 조회하시오 (indent칼럼명 참조)
+   제목         답변갯수
+   ---------  --------
+   무궁화
+   코리아        	 2
+   점심시간      	 3
+   한글날
+   오필승
+
+select max(indent)
+from tb_bbs
+where grpno=?
+
+
+
 
 
 
