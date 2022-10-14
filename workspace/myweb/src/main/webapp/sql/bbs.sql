@@ -2,9 +2,10 @@
 --답변 및 댓글형 게시판
 
 --오라클 콘솔창 예쁘게 출력하기
+set pagesize 100;
 set linesize 1800;
 col wname for a10;
-col subject for a10; 
+col subject for a20; 
 col content for a20; 
 col ip for a10; 
 col passwd for a10; 
@@ -153,14 +154,83 @@ where wname like '%파스타%'
    한글날
    오필승
 
+--답변수 달기
 select max(indent)
 from tb_bbs
 where grpno=?
 
 
+--출력 줄수
+set pagesize 100;
+--한줄 출력 글자갯수
+set linesize 100;
+--칼럼길이 10칸 임시 조정
+col wname for a10;
+col subject for a20;
+
+[페이징]
+- rownum 줄번호 활용
+
+1)
+SELECT bbsno, subject, wname, readcnt, indent, regdt
+FROM tb_bbs
+ORDER BY grpno DESC, ansnum ASC;
+
+2)rownum 추가 - 줄번호까지 정렬됨
+SELECT bbsno, subject, wname, readcnt, indent, regdt, rownum
+FROM tb_bbs
+ORDER BY grpno DESC, ansnum ASC;
+
+3) 1)의 SQL문을 셀프조인하고, rownum 추가
+SELECT bbsno, subject, wname, readcnt, indent, regdt, rownum
+from (
+		SELECT bbsno, subject, wname, readcnt, indent, regdt
+		FROM tb_bbs
+		ORDER BY grpno DESC, ansnum ASC
+	  );
+
+4) 줄번호 1~12 조회 (1페이지)
+SELECT bbsno, subject, wname, readcnt, indent, regdt, rownum
+from (
+		SELECT bbsno, subject, wname, readcnt, indent, regdt
+		FROM tb_bbs
+		ORDER BY grpno DESC, ansnum ASC
+	  )
+WHERE rownum>=1 AND rownum<=12;
+
+5) 줄번호 13~24 조회 (2페이지) -> 조회안됨.선택된 레코드가 없습니다.
+SELECT bbsno, subject, wname, readcnt, indent, regdt, rownum
+from (
+		SELECT bbsno, subject, wname, readcnt, indent, regdt
+		FROM tb_bbs
+		ORDER BY grpno DESC, ansnum ASC
+	  )
+WHERE rownum>=13 AND rownum<=24;
 
 
+6) 줄번호가 있는 3)의 테이블을 한번 더 셀프조인하고, rownum칼럼명을 r로 바꾼다
+SELECT *
+FROM (
+		SELECT bbsno, subject, wname, readcnt, indent, regdt, rownum as r
+		from (
+				SELECT bbsno, subject, wname, readcnt, indent, regdt
+				FROM tb_bbs
+				ORDER BY grpno DESC, ansnum ASC
+			  )
+	  )
+WHERE r>=13 AND r<=24;
 
 
-
-
+7) 페이징+검색
+   예) 제목에서 '파스타'가 있는 행을 검색해서 2페이지 (13~24행) 조회하시오
+SELECT *
+FROM (
+		SELECT bbsno, subject, wname, readcnt, indent, regdt, rownum as r
+		from (
+				SELECT bbsno, subject, wname, readcnt, indent, regdt
+				FROM tb_bbs
+				WHERE subject LIKE '%파스타%'
+				ORDER BY grpno DESC, ansnum ASC
+			  )
+	  )
+WHERE r>=13 AND r<=24;

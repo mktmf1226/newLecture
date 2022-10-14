@@ -75,3 +75,25 @@ function searchCheck(){
 	}//if end
 	return true;
 }//searchCheck() end
+
+
+/**----------------------------------------------------- */
+function plusDivs(n) {//버튼클릭하면 인덱스가 바뀜
+  showDivs(slideIndex += n);
+}
+
+function currentDiv(n) {
+  showDivs(slideIndex = n);
+}
+
+function showDivs(n) {//첫번째 이미지를 가져온다
+  var i;
+  var x = document.getElementsByClassName("mySlides");
+  if (n > x.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = x.length} ;
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";
+  }
+  x[slideIndex-1].style.display = "block";
+}
+/**----------------------------------------------------- */

@@ -18,10 +18,7 @@
 	</thead>
 	<tbody>
 <%
-	//한페이지당 출력할 행의 갯수
-	int recordPerPage=12;
-
-	ArrayList<BbsDTO> list=dao.list3(col, word, nowPage, recordPerPage);
+	ArrayList<BbsDTO> list=dao.list2(col, word);
 	if(list==null){
 		out.println("<tr>");
 		out.println("	<td colspan='5'>");
@@ -44,7 +41,7 @@
 						out.println("<img src='../images/reply.gif'>");
 					}//for end
 %>
-					<a href="bbsRead.jsp?bbsno=<%=dto.getBbsno()%>&col=<%=col%>&word=<%=word%>&nowPage=<%=nowPage%>"><%=dto.getSubject()%></a>
+					<a href="bbsRead.jsp?bbsno=<%=dto.getBbsno()%>&col=<%=col%>&word=<%=word%>"><%=dto.getSubject()%></a>
 <%
 					//오늘 작성한 글제목 뒤에 new 이미지 출력
 					//작성일(regdt)에서 "년월일"만 자르기
@@ -84,17 +81,6 @@
 		out.println("	  글갯수:<strong> "+totalRecord +" </strong>");
 		out.println("	</td>");
 		out.println("</tr>");
-
-		//페이지 리스트
-		out.println("<tr>");
-		out.println("	<td colspan='5' style='text-align:center; height: 50px'>");
-		
-		String paging=new Paging().paging2(totalRecord, nowPage, recordPerPage, col, word, "bbsList.jsp");
-		out.print(paging);
-		
-		out.println("	</td>");
-		out.println("</tr>");
-
 %>
 		<!-- 검색 시작 -->
 		<tr>

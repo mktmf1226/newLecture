@@ -12,7 +12,8 @@
   <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"><!-- w3 css import -->
+  
   <!-- 사용자 정의 스타일과 자바스크립트 -->
   <!-- 주의사항 : CSS와 JS는 각 웹브라우저에서 쿠키삭제하고 확인할것 -->
   <!-- layout.css import -->
@@ -53,6 +54,15 @@
 	      clearTimeout(timer);    //시간해제
 	  }//killtimeclock() end
   </script>
+  <style><!-- 이미지넘김 -->
+	.mySlides {display:none}
+	.w3-left, .w3-right, .w3-badge {cursor:pointer}
+	.w3-badge {height:13px;width:13px;padding:0}
+  </style>
+  <script>
+	var slideIndex = 1;
+	showDivs(slideIndex);
+  </script><!-- 이미지넘김 끝 -->
 </head>
 <body onload="showtimeclock()">
 
@@ -80,8 +90,17 @@
 </nav>
 
 <!-- First Container 시작 -->
-<div class="container-fluid bg-1 text-center">
-  <img src="./images/orange.jpg" class="img-responsive margin" style="display:inline; border-radius: 15%;" alt="orange" width="50%">
+<div class="container-fluid bg-1 text-center w3-content w3-display-container" style="width:100%">
+  <img class="mySlides" src="./images/orange.jpg" style="display:inline; border-radius: 15%;" alt="orange" width="50%">
+  <img class="mySlides" src="./images/watermelon.jpg" style="display:inline; border-radius: 15%;" alt="watermelon" width="50%">
+  <img class="mySlides" src="./images/strawberry.jpg" style="display:inline; border-radius: 15%;" alt="strawberry" width="50%">
+  <div class="w3-center w3-container w3-section w3-large w3-text-white w3-display-bottommiddle" style="width:100%">
+    <div class="w3-left w3-hover-text-khaki" onclick="plusDivs(-1)">&#10094;</div>
+    <div class="w3-right w3-hover-text-khaki" onclick="plusDivs(1)">&#10095;</div>
+    <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(1)"></span>
+    <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(2)"></span>
+    <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(3)"></span>
+  </div>
 </div><!-- First Container 끝 -->
 
 
@@ -120,6 +139,12 @@
 %>
 						<tr>
 							<td style="text-align: left">
+<%
+								//답변이미지 출력
+								for(int n=1; n<=dto.getIndent(); n++){
+									out.println("<img src='./images/reply.gif'>");
+								}//for end
+%>							
 								<a href="./bbs/bbsRead.jsp?bbsno=<%=dto.getBbsno()%>"><%=dto.getSubject()%></a>
 								<img src='./images/hot.gif'>
 							</td>
@@ -150,15 +175,21 @@
 				if(newlist==null){
 					out.println("<tr>");
 					out.println("	<td colspan='3'>");
-					out.println("	  <strong>관련자료 없음!!</strong>");
+					out.println("	  <strong>현재 새 글이 없습니다</strong>");
 					out.println("	</td>");
 					out.println("</tr>");
 				}else{
-					for(int i=0; i<newlist.size(); i++){
+					for(int i=0; i<5; i++){
 						dto=newlist.get(i);
 %>
 						<tr>
 							<td style="text-align: left">
+<%
+								//답변이미지 출력
+								for(int n=1; n<=dto.getIndent(); n++){
+									out.println("<img src='./images/reply.gif'>");
+								}//for end
+%>
 								<a href="./bbs/bbsRead.jsp?bbsno=<%=dto.getBbsno()%>"><%=dto.getSubject()%></a>
 								<img src='./images/new.gif'>
 							</td>

@@ -7,7 +7,7 @@
 <p>
 	<a href="bbsForm.jsp">[글쓰기]</a>
 	&nbsp;&nbsp;
-	<a href="bbsList.jsp?col=<%=col%>&word=<%=word%>&nowPage=<%=nowPage%>">[글목록]</a>
+	<a href="bbsList.jsp?col=<%=col%>&word=<%=word%>">[글목록]</a>
 </p>
 <div class="container">
 <%
