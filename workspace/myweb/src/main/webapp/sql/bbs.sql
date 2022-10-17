@@ -234,3 +234,18 @@ FROM (
 			  )
 	  )
 WHERE r>=13 AND r<=24;
+
+
+
+--newlist() 수정
+SELECT *
+FROM (
+		SELECT bbsno, wname, subject, readcnt, indent, rownum as r
+		from (
+				SELECT bbsno, wname, subject, readcnt, indent
+				FROM tb_bbs
+				WHERE (months_between(regdt, (select sysdate from dual)))=0
+				ORDER BY regdt DESC, ansnum ASC
+			  )
+	  )
+WHERE rownum>=1 AND rownum<=5;

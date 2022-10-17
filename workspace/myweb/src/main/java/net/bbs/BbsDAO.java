@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-import net.bbs.BbsDTO;
 import net.utility.DBClose;
 import net.utility.DBOpen;
 
@@ -270,10 +269,17 @@ public class BbsDAO {
 			con=dbopen.getConnection(); //DB연결
 			
 			sql=new StringBuilder();
-			sql.append(" SELECT bbsno, wname, subject, readcnt, indent ");
-			sql.append(" FROM tb_bbs ");
-			sql.append(" WHERE (months_between(regdt, (select sysdate from dual)))=0 ");
-			sql.append(" ORDER BY regdt DESC, ansnum ASC ");
+			sql.append(" SELECT * ");
+			sql.append(" FROM ( ");
+			sql.append(" 		SELECT bbsno, wname, subject, readcnt, indent, rownum AS r ");
+			sql.append(" 		FROM ( ");
+			sql.append(" 				SELECT bbsno, wname, subject, readcnt, indent ");
+			sql.append(" 				FROM tb_bbs ");
+			sql.append(" 				WHERE (months_between(regdt, (SELECT sysdate FROM dual)))=0 ");
+			sql.append(" 				ORDER BY regdt DESC, ansnum ASC ");
+			sql.append(" 			  ) ");
+			sql.append(" 	  ) ");
+			sql.append(" WHERE rownum>=1 AND rownum<=5 ");
 			
 			pstmt=con.prepareStatement(sql.toString());
 			rs=pstmt.executeQuery();//select문 실행
