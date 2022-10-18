@@ -90,7 +90,7 @@
 
 <!-- First Container 시작 -->
 <div class="container-fluid bg-1 text-center" style="width:100%">
-	<div class="w3-content w3-display-container" style="width:100%; position:relative;">
+	<div class="w3-content w3-display-container" style="position:relative;" height="900px">
 	  <img class="mySlides" src="./images/orange.jpg" style="object-fit:cover; border-radius: 15%; margin:auto;" alt="orange" width="50%">
 	  <img class="mySlides" src="./images/watermelon.jpg" style="object-fit:cover; border-radius: 15%; margin:auto;" alt="watermelon" width="50%">
 	  <img class="mySlides" src="./images/strawberry.jpg" style="object-fit:cover; border-radius: 15%; margin:auto;" alt="strawberry" width="50%">
@@ -114,13 +114,15 @@
 	    
         <h3>현재 시간은</h3>
         <div id="digitclock"></div>
+        <br>
                 
-        <div class="col-xs-6">
-        	<h3>*인기 글*</h3>
-        	<table class="table table-hover">
+        <div class="col-xs-6" style="padding-right: 50px; padding-bottom: 10px;">
+        	<h4>*인기 글*</h4>
+        	<table class="table table-hover" style="font-size: 15px; table-layout:fixed;">
 			<thead>
 				<tr>
-					<th style="text-align: left">제목</th>
+					<th class="text-center" style="padding-right: 0; padding-left: 0; width:10%">랭킹</th>
+					<th style="text-align: left; width:60%">제목</th>
 					<th class="text-center">작성자</th>
 					<th class="text-center">조회수</th>
 				</tr>
@@ -139,6 +141,7 @@
 						dto=hotlist.get(i);
 %>
 						<tr>
+							<td><%=i+1%></td>
 							<td style="text-align: left">
 <%
 								//답변이미지 출력
@@ -158,14 +161,15 @@
 %>			
 			</tbody>
 			</table>
+			<input type="button" style="position:absolute; font-size: 12px; right:50px; bottom:0px" value="게시판 이동" onclick="location.href='./bbs/bbsList.jsp'">
         </div><!-- 인기글 끝 -->
         
-        <div class="col-xs-6">
-        	<h3>*새 글*</h3>
-        	<table class="table table-hover">
+        <div class="col-xs-6" style="padding-left: 50px;">
+        	<h4>*새 글*</h4>
+        	<table class="table table-hover" style="font-size: 15px; table-layout:fixed;">
 			<thead>
 				<tr>
-					<th style="text-align: left">제목</th>
+					<th style="text-align: left; width:60%">제목</th>
 					<th class="text-center">작성자</th>
 					<th class="text-center">조회수</th>
 				</tr>

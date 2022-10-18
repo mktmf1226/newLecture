@@ -102,3 +102,105 @@ function showDivs(n) {
   dots[slideIndex-1].className += " w3-white";
 }
 /**----------------------------------------------------- */
+
+
+function loginCheck(){ //로그인 유효성 검사 (아이디, 비번)
+	//1)아이디 5~10글자 이내인지 검사
+	let id=document.getElementById("id").value;
+	id=id.trim();
+	if(!(id.length>=5 && id.length<=10)){
+		alert("아이디를 5~10글자로 입력해 주세요");
+		document.getElementById("id").focus();
+		return false;
+	}//if end
+	//2)비밀번호 5~10글자 이내인지 검사
+	let passwd=document.getElementById("passwd").value;
+	passwd=passwd.trim();
+	if(!(passwd.length>=5 && passwd.length<=10)){
+		alert("비밀번호를 5~10글자로 입력해 주세요");
+		document.getElementById("passwd").focus();
+		return false;
+	}//if end
+	return true;
+}//loginCheck() end
+
+
+function idCheck(){ //아이디 중복확인
+
+	//모달창
+	//->부모창과 자식창이 한 몸으로 구성되어 있음
+	//->참조 https://www.w3schools.com/bootstrap/bootstrap_modal.asp
+	
+	//새창만들기
+	//->부모창과 자식창이 별개로 구성되어 있음
+	//->모바일에 기반을 둔 frontend단에서는 사용하지 말것!!
+	//->참조 https://www.w3schools.com/jsref/met_win_open.asp
+	
+	//window.open("파일명", "새창이름", "다양한옵션들")
+	window.open("idCheckForm.jsp", "idwin", "width=600, height=350")
+	
+}//idCheck() end
+
+
+function emailCheck(){ //이메일 중복확인
+	window.open("emailCheckForm.jsp", "emailwin", "width=600, height=350")	
+}//emailCheck() end
+
+
+function memberCheck(){ //회원가입 유효성 검사
+	//1)아이디 5~10글자 인지?
+	//->idCheckForm.jsp의 blankCheck()로 진행
+	//->아이디를 입력했는지?로 진행
+	let id=document.getElementById("id").value;
+	if(id.length==0){
+		alert("아이디를 입력해 주세요");
+		document.getElementById("id").focus();
+		return false;
+	}//if end
+	
+    //2)비밀번호 5~10글자 인지?
+	let passwd=document.getElementById("passwd").value;
+	passwd=passwd.trim();
+	if(!(passwd.length>=5 && passwd.length<=10)){
+		alert("비밀번호를 5~10글자로 입력해 주세요");
+		document.getElementById("passwd").focus();
+		return false;
+	}//if end
+	
+    //3)비밀번호와 비밀번호확인이 서로 일치하는지?
+	let repasswd=document.getElementById("repasswd").value;
+	if(!(repasswd==passwd)){
+		alert("비밀번호가 일치하지 않습니다");
+		document.getElementById("repasswd").focus();
+		return false;
+	}//if end
+
+    //4)이름 2글자 이상 인지?
+	let mname=document.getElementById("mname").value;
+	mname=mname.trim();
+	if(mname.length<2){
+		alert("이름 2글자 이상 입력해주세요");
+		document.getElementById("mname").focus();
+		return false;
+	}//if end
+
+    //5)이메일 5~50글자 인지?
+    //->emailCheckForm.jsp의 blankCheck()로 진행
+    //->이메일을 입력했는지?로 진행
+	let email=document.getElementById("email").value;
+	if(email.length==0){
+		alert("이메일을 입력해 주세요");
+		document.getElementById("email").focus();
+		return false;
+	}//if end
+
+    //6)직업을 선택했는지?
+    let job=document.getElementById("job").value;
+	if(job.length==0 || job=="0"){
+		alert("직업을 선택해 주세요");
+		return false;
+	}//if end
+	
+	return true;    
+}//memberCheck() end
+
