@@ -9,6 +9,7 @@
 	String id	 	=request.getParameter("id").trim();
 	String passwd	=request.getParameter("passwd").trim();
 	String mname	=request.getParameter("mname").trim();
+	String tel		=request.getParameter("tel").trim();
 	String email	=request.getParameter("email").trim();
 	String zipcode 	=request.getParameter("zipcode").trim();
 	String address1	=request.getParameter("address1").trim();
@@ -20,6 +21,7 @@
 	dto.setId(id);
 	dto.setPasswd(passwd);
 	dto.setMname(mname);
+	dto.setTel(tel);
 	dto.setEmail(email);
 	dto.setZipcode(zipcode);
 	dto.setAddress1(address1);
@@ -34,13 +36,10 @@
 		out.println("<p><a href='javascript:history.back()'>[다시시도]</p>");
 	}else{
 		//회원가입 성공
-		out.print("회원가입 성공~~");
-		out.print("회원등급 : " + mlevel);
-		
-		//첫페이지 이동
-		//http://localhost:9090/myweb/index.jsp
-		String root=Utility.getRoot(); // /myweb 반환
-		response.sendRedirect(root+"/index.jsp");
+		out.println("<script>");
+		out.println("	alert('회원가입 되었습니다~');");
+		out.println("	location.href='loginForm.jsp';"); //목록페이지 이동		
+		out.println("</script>");		
 	}//if end
 %>
 <!-- 본문끝 -->

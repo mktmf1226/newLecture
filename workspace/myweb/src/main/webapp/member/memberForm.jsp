@@ -4,7 +4,7 @@
 
 <!-- 본문 시작 memberForm.jsp-->
 <h3>* 회/원/가/입 *</h3>
-<form name="memfrm" id="memfrm" action="memberProc.jsp" onsubmit="return memberCheck()"><!-- myscript.js -->
+<form name="memfrm" id="memfrm" method="post" action="memberProc.jsp" onsubmit="return memberCheck()"><!-- myscript.js -->
 <span style="color:red; font-weight: bold">* 필수입력</span>
 <br>
 <table class="table">
@@ -75,7 +75,7 @@
 </table>
 
 <!-- ----- DAUM 우편번호 API 시작 ----- -->
-<div id="wrap" style="display:none;border:1px solid;width:500px;height:300px;margin:5px 110px;position:relative">
+<div id="wrap" style="display:none;border:1px solid;width:500px;height:300px;margin:5px 110px;position:fixed; left:120px; top:200px;">
   <img src="//i1.daumcdn.net/localimg/localimages/07/postcode/320/close.png" id="btnFoldWrap" style="cursor:pointer;position:absolute;right:0px;top:-1px;z-index:1" onclick="foldDaumPostcode()" alt="접기 버튼">
 </div>
 

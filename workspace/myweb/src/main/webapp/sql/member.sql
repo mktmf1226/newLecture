@@ -83,4 +83,7 @@ INSERT INTO member(id, passwd, mname, tel, email, zipcode, address1, address2, j
 VALUES(?,?,?,?,?,?,?,?,?,'D1',sysdate)
 
 
-
+--아이디 찾기 확인
+SELECT id
+FROM member
+where mname='웹마스터' and email='webmaster@itwill.com'

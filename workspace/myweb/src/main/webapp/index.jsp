@@ -55,6 +55,14 @@
 	  }//killtimeclock() end
   </script>
   <style><!-- 이미지넘김 -->
+    @font-face {
+	    font-family:"MajestySquare";
+	    src:url("./font/MajestySquare.ttf") format("truetype");	    
+  	} 
+  	@font-face {
+	    font-family:"bernadette";
+	    src:url("./font/bernadette.ttf") format("truetype");	    
+  	} 	
 	.mySlides {display:none}
 	.w3-left, .w3-right, .w3-badge {cursor:pointer}
 	.w3-badge {height:13px;width:13px;padding:0}
@@ -90,16 +98,28 @@
 
 <!-- First Container 시작 -->
 <div class="container-fluid bg-1 text-center" style="width:100%">
-	<div class="w3-content w3-display-container" style="position:relative;" height="900px">
-	  <img class="mySlides" src="./images/orange.jpg" style="object-fit:cover; border-radius: 15%; margin:auto;" alt="orange" width="50%">
-	  <img class="mySlides" src="./images/watermelon.jpg" style="object-fit:cover; border-radius: 15%; margin:auto;" alt="watermelon" width="50%">
-	  <img class="mySlides" src="./images/strawberry.jpg" style="object-fit:cover; border-radius: 15%; margin:auto;" alt="strawberry" width="50%">
+	<div class="w3-content w3-display-container" style="position:relative; height:820px;">
+	  <div class="mySlides">
+	    <img src="./images/orange.jpg" style="object-fit:cover; border-radius: 15%; margin:auto; height:820px;" alt="orange">
+	    <h3 style="position:absolute; top:20px; color:red; font-family:'bernadette'; font-size: 240px; transform: rotate(20deg);">* ORANGE *</h3>
+	    <h3 style="position:absolute; top:32px; color:orange; font-family:'bernadette'; font-size: 240px; transform: rotate(20deg);">* ORANGE *</h3>
+	  </div>
+	  <div class="mySlides">
+	    <img src="./images/watermelon.jpg" style="object-fit:cover; border-radius: 15%; margin:auto; height:820px;" alt="watermelon">
+	    <h3 style="position:absolute; top:90px; color:yellow; font-family:'bernadette'; font-size: 140px; transform: rotate(-10deg) skew(0,-15deg);">* WATERMELON *</h3>
+	    <h3 style="position:absolute; top:102px; color:green; font-family:'bernadette'; font-size: 140px; transform: rotate(-10deg) skew(0,-15deg);">* WATERMELON *</h3>
+	  </div>  
+	  <img class="mySlides" src="./images/strawberry.jpg" style="object-fit:cover; border-radius: 15%; margin:auto; height:820px;" alt="strawberry">
+	  <img class="mySlides" src="./images/cornflower.jpg" style="object-fit:cover; border-radius: 15%; margin:auto; height:820px;" alt="cornflower">
+	  <img class="mySlides" src="./images/grapefruit.jpg" style="object-fit:cover; border-radius: 15%; margin:auto; height:820px;" alt="grapefruit">
 	  <div class="w3-center w3-container w3-section w3-large w3-text-white w3-display-bottommiddle" style="width:100%">
 	    <div class="w3-left w3-hover-text-khaki" onclick="plusDivs(-1)">&#10094;</div>
 	    <div class="w3-right w3-hover-text-khaki" onclick="plusDivs(1)">&#10095;</div>
-	    <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(1)"></span>
-	    <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(2)"></span>
-	    <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(3)"></span>
+	    <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onmouseover="currentDiv(1)"></span>
+	    <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onmouseover="currentDiv(2)"></span>
+	    <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onmouseover="currentDiv(3)"></span>
+	    <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onmouseover="currentDiv(4)"></span>
+	    <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onmouseover="currentDiv(5)"></span>
 	  </div>
   </div>
 </div><!-- First Container 끝 -->

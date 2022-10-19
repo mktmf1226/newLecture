@@ -26,7 +26,7 @@
 		
 		//이메일주소 유효성 검사
 		if(email.indexOf("@")==-1){ //@가 없습니까?
-	        alert("이메일 주소가 잘못되었습니다");
+	        alert("유효하지 않은 이메일 주소입니다");
 	        return false;
 	    }//if end
 		return true;

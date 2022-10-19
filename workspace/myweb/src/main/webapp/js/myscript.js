@@ -194,13 +194,49 @@ function memberCheck(){ //회원가입 유효성 검사
 		return false;
 	}//if end
 
+	//7)전화번호 0~14글자 인지?
+	let tel=document.getElementById("tel").value;
+	tel=tel.trim();
+	if(tel.length>14){
+		alert("전화번호를 14글자 이내로 입력해주세요");
+		document.getElementById("tel").focus();
+		return false;
+	}//if end
+
     //6)직업을 선택했는지?
     let job=document.getElementById("job").value;
 	if(job.length==0 || job=="0"){
 		alert("직업을 선택해 주세요");
+		document.getElementById("job").focus();
 		return false;
 	}//if end
 	
 	return true;    
 }//memberCheck() end
 
+
+function findIDCheck(){
+    //이름 2글자 이상 인지?
+	let mname=document.getElementById("mname").value;
+	mname=mname.trim();
+	if(mname.length<2){
+		alert("이름 2글자 이상 입력해주세요");
+		document.getElementById("mname").focus();
+		return false;
+	}//if end
+	
+	//이메일 5~50글자 인지?
+	let email=document.getElementById("email").value;
+	email=email.trim();
+	if(email.length<5 || email.length>50){
+		alert("이메일은 5~50글자 이내로 입력해주세요");
+		return false;
+	}//if end
+	
+	//이메일주소 유효성 검사
+	if(email.indexOf("@")==-1){ //@가 없습니까?
+        alert("유효하지 않은 이메일 주소입니다");
+        return false;
+    }//if end
+    return true;
+}//findIDCheck() end

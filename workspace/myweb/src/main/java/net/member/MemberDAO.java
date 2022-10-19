@@ -115,8 +115,59 @@ public class MemberDAO {//Data Access Object
 	
 	public int create(MemberDTO dto) {
 		int cnt=0;
-		
+		try {
+			con=dbopen.getConnection(); //DB연결
+			
+			sql=new StringBuilder();
+			sql.append(" INSERT INTO member(id, passwd, mname, tel, email, zipcode, address1, address2, job, mlevel, mdate) ");
+			sql.append(" VALUES(?,?,?,?,?,?,?,?,?,'D1',sysdate) ");
+
+			pstmt=con.prepareStatement(sql.toString());
+			pstmt.setString(1, dto.getId());
+			pstmt.setString(2, dto.getPasswd());
+			pstmt.setString(3, dto.getMname());
+			pstmt.setString(4, dto.getTel());
+			pstmt.setString(5, dto.getEmail());
+			pstmt.setString(6, dto.getZipcode());
+			pstmt.setString(7, dto.getAddress1());
+			pstmt.setString(8, dto.getAddress2());
+			pstmt.setString(9, dto.getJob());			
+			
+			cnt=pstmt.executeUpdate();			
+		}catch (Exception e) {
+			System.out.println("행추가 실패:" + e);
+		}finally {
+			DBClose.close(con, pstmt);
+		}//end
 		return cnt;
 	}//create() end
 	
+	
+	public String findIDProc(MemberDTO dto) {
+		String id=null;
+		try {
+			con=dbopen.getConnection();
+			
+			sql=new StringBuilder();
+			sql.append(" SELECT id ");
+			sql.append(" FROM member ");
+			sql.append(" WHERE mname=? AND email=? ");
+			pstmt=con.prepareStatement(sql.toString());
+			pstmt.setString(1, dto.getMname());
+			pstmt.setString(2, dto.getEmail());
+			
+			rs=pstmt.executeQuery();//select문 실행
+			if(rs.next()) {//커서가 있으면
+				id=rs.getString("id");
+			}else {
+				id=null;
+				System.out.println("아이디찾기 자료없음!");
+			}//if end			
+		}catch (Exception e) {
+			System.out.println("아이디찾기 실패 : " + e);
+		}finally {
+			DBClose.close(con, pstmt, rs);
+		}//end
+		return id;
+	}//loginProc() end
 }//class end
