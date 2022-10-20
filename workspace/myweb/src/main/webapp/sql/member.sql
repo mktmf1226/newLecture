@@ -83,7 +83,19 @@ INSERT INTO member(id, passwd, mname, tel, email, zipcode, address1, address2, j
 VALUES(?,?,?,?,?,?,?,?,?,'D1',sysdate)
 
 
---아이디 찾기 확인
+--아이디/비번찾기 연습용 데이터 행추가 (확인 가능한 이메일 주소 정확히 적어주세요)
+insert into member(id, passwd, mname, tel, email, zipcode, address1, address2, job, mlevel, mdate)
+values('kimkim', '12341234', '김연아', '123-4567', 'dawisdom@naver.com'
+     , '12345', '서울시 종로구 인사동', '역삼빌딩8층', 'A02', 'A1', sysdate );
+commit;
+
+--아이디/비번찾기
+1) 이름과 이메일 일치하면
 SELECT id
 FROM member
-where mname='웹마스터' and email='webmaster@itwill.com'
+WHERE mname=? AND email=?
+
+2) 임시 비밀번호를 발급해서 테이블 수정하기
+UPDATE member 
+SET passwd=?
+WHERE mname=? AND email=?

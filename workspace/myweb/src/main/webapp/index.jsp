@@ -184,7 +184,7 @@
 			<input type="button" style="position:absolute; font-size: 12px; right:50px; bottom:0px" value="게시판 이동" onclick="location.href='./bbs/bbsList.jsp'">
         </div><!-- 인기글 끝 -->
         
-        <div class="col-xs-6" style="padding-left: 50px;">
+        <div class="col-xs-6" style="padding-left: 50px; padding-right: 0px; padding-bottom: 10px;">
         	<h4>*새 글*</h4>
         	<table class="table table-hover" style="font-size: 15px; table-layout:fixed;">
 			<thead>
@@ -226,7 +226,8 @@
 				}//if end
 %>			
 			</tbody>
-			</table>        
+			</table>
+			<input type="button" style="position:absolute; font-size: 12px; right:0px; bottom:0px" value="게시판 이동" onclick="location.href='./bbs/bbsList.jsp'">     
         </div><!-- 새글 끝 -->
 
     	<!-- 본문끝 -->
