@@ -240,3 +240,76 @@ function findIDCheck(){
     }//if end
     return true;
 }//findIDCheck() end
+
+
+function withPWCheck(){
+	let passwd=document.getElementById("passwd").value;
+	passwd=passwd.trim();
+	if(passwd.length==0){
+		alert("비밀번호를 입력해 주세요");
+		document.getElementById("passwd").focus();
+		return false;
+	}//if end
+
+	let message="진행된 내용은 복구되지 않습니다\n계속 진행할까요?";
+	if(confirm(message)){ //확인 true, 취소 false
+		return true; //서버로 전송
+	}else{
+		return false;
+	}//if end
+}//withPWCheck() end
+
+
+
+function pdsCheck(){ //포토갤러리 유효성검사
+	//1) 작성자 2글자 이상 입력
+ 	let wname=document.getElementById("wname").value; //작성자 가져오기
+	wname=wname.trim(); //좌우공백 제거
+	if(wname.length<2){
+		alert("작성자 2글자 이상 입력해주세요");
+		document.getElementById("wname").focus(); //작성자칸에 커서 생성
+		return false; 
+		//onsubmit의 리턴값은 boolean형이므로 서버에 전송하지 않는다는 false를 리턴한다
+	}//if end
+ 	
+ 	//2) 제목 2글자 이상 입력
+	let subject=document.getElementById("subject").value;
+	subject=subject.trim();
+	if(subject.length<2){
+		alert("제목 2글자 이상 입력해주세요");
+		document.getElementById("subject").focus();
+		return false;
+	}//if end
+	
+	//3) 비밀번호 4~15글자이면서, 숫자형 기호만 입력
+	let passwd=document.getElementById("passwd").value;
+	passwd=passwd.trim();
+	if(!(passwd.length>=4 && passwd.length<=15) || isNaN(passwd)){ //숫자로 입력하지 않으면 true
+		alert("비밀번호 4~15글자 사이 숫자로 입력해주세요");
+		document.getElementById("passwd").focus();
+		return false;
+	}//if end
+	
+	//4)첨부파일
+	//->파일의 확장명이 이미지 파일(png, jpg, gif)인지 확인하시오
+	let filename=document.getElementById("filename").value; //예)d:/work/2022.10/sky.png
+	filename=filename.trim();
+	if(filename.length==0){
+		alert("첨부 파일 선택하세요~");
+		return false;
+	}else{
+		//filename변수값에서 마지막 . 의 순서값
+		let dot=filename.lastIndexOf(".");
+		//확장명 : 마지막 . 이후 문자열 자르기
+		let ext=filename.substr(dot+1);
+		//확장명을 전부 소문자 치환
+		ext=ext.toLowerCase();
+		if(ext=="png"||ext=="jpg"||ext=="gif"||ext=="heif"){
+			return true;
+		}else{
+			alert("이미지 파일만 업로드 가능합니다");
+			return false;
+		}//if end
+	}//if end
+	
+}//pdsCheck() end

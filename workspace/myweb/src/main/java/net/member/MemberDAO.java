@@ -12,10 +12,12 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.Cookie;
 
 import net.utility.DBClose;
 import net.utility.DBOpen;
 import net.utility.MyAuthenticator;
+import javax.servlet.http.HttpServletRequest;
 
 public class MemberDAO {//Data Access Object
 						//DB 접근 객체
@@ -292,6 +294,7 @@ public class MemberDAO {//Data Access Object
 			sql.append(" , address1=? ");
 			sql.append(" , address2=? ");
 			sql.append(" , job=? ");
+			sql.append(" WHERE id=? ");
 					
 			pstmt=con.prepareStatement(sql.toString());
 			pstmt.setString(1, dto.getPasswd());
@@ -300,6 +303,7 @@ public class MemberDAO {//Data Access Object
 			pstmt.setString(4, dto.getAddress1());
 			pstmt.setString(5, dto.getAddress2());
 			pstmt.setString(6, dto.getJob());		
+			pstmt.setString(7, dto.getId());		
 	
 			cnt=pstmt.executeUpdate();
 		}catch (Exception e) {
@@ -311,6 +315,37 @@ public class MemberDAO {//Data Access Object
 	}//updateproc() end
 	
 	
-	
+	public int withdrawProc(MemberDTO dto) {
+		int cnt=0;
+		try {
+			con=dbopen.getConnection(); //DB연결					
+			sql=new StringBuilder();
+			sql.append(" UPDATE member ");
+			sql.append(" SET mlevel='F1' ");
+			sql.append(" WHERE id=? and passwd=? ");					
+			pstmt=con.prepareStatement(sql.toString());
+			pstmt.setString(1, dto.getId());		
+			pstmt.setString(2, dto.getPasswd());		
+			cnt=pstmt.executeUpdate();
+			if(cnt!=0) {//update를 실행했다면
+				Cookie[] cookies=request.getCookies(); //사용자 PC에 저장된 모든 쿠키값 가져오기
+				String c_id="";
+				if(cookies!=null){ //쿠키가 존재한다면
+					for(int i=0; i<cookies.length; i++){ //모든 쿠키값을 검색
+						Cookie cookie=cookies[i]; //쿠키 하나씩 가져오기
+						if(cookie.getName().equals(dto.getId())==true){ //쿠키이름이 c_id인가요?
+							cookie=new Cookie("c_id", ""); //c_id에 빈문자열 저장
+							cookie.setMaxAge(0); //쿠키 생존기간 0
+						}//if end
+					}//for end
+				}//if end
+			}//if end
+		}catch (Exception e) {
+			System.out.println("회원탈퇴 실패 : " + e);
+		}finally {
+			DBClose.close(con, pstmt);
+		}//end
+		return cnt;
+	}//withdrawProc() end
 	
 }//class end
