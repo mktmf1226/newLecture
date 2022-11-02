@@ -11,6 +11,7 @@ CREATE TABLE tb_pds (
   ,readcnt    NUMBER         DEFAULT 0  --조회수
   ,filename   VARCHAR2(250)  NOT NULL   --파일명
   ,filesize   NUMBER         DEFAULT 0  --파일크기
+  ,ip		  VARCHAR2(15)
   ,PRIMARY KEY(pdsno)
 );
 

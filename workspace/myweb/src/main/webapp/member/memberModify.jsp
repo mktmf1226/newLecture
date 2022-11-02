@@ -5,20 +5,8 @@
 <!-- 본문시작 memberModify.jsp-->
 <h3>* 회원정보 수정 *</h3>
 <%
-	//아이디저장 쿠키 확인	--------------------------------------
-	Cookie[] cookies=request.getCookies(); //사용자 PC에 저장된 모든 쿠키값 가져오기
-	String c_id="";
-	if(cookies!=null){ //쿠키가 존재한다면
-		for(int i=0; i<cookies.length; i++){ //모든 쿠키값을 검색
-			Cookie cookie=cookies[i]; //쿠키 하나씩 가져오기
-			if(cookie.getName().equals("c_id")==true){ //쿠키이름이 c_id인가요?
-				c_id=cookie.getValue(); //출력될 값
-			}//if end
-		}//for end
-	}//if end
-	//--------------------------------------------------------
-	
-	dto=dao.read(c_id);
+	String id=(String)session.getAttribute("s_id");
+	dto=dao.read(id);
 	if(dto==null){
 		out.println("해당 글 없음!!");
 	}else{
@@ -30,7 +18,7 @@
 		<tr>
 		    <th>아이디</th>
 		    <td style="text-align: left">
-		      <input type="text" name="id" id="id" value="<%=c_id%>" size="15" style="background-color:lightgray;" readonly>
+		      <input type="text" name="id" id="id" value="<%=id%>" size="15" style="background-color:lightgray;" readonly>
 		    </td>
 		</tr>
 		<tr>

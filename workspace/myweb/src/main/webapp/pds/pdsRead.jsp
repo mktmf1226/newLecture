@@ -46,7 +46,9 @@
 			<td colspan="2"><a href="pdsList.jsp">[목록으로]</a></td>
 		</tr>			
 		</table>
-
+		<br>
+		<input type="button" value="수정" onclick="location.href='pdsUpdate.jsp?pdsno=<%=pdsno%>'">
+		<input type="button" value="삭제" onclick="location.href='pdsDel.jsp?pdsno=<%=pdsno%>'">
 
 <%
 	}//if end

@@ -312,4 +312,23 @@ function pdsCheck(){ //포토갤러리 유효성검사
 		}//if end
 	}//if end
 	
+	function pwCheck2(){
+		let passwd=document.getElementById("passwd").value;
+		passwd=passwd.trim();
+		if(passwd.length<4 || passwd.length>15){ //숫자로 입력하지 않으면 true
+			alert("비밀번호 4~15 글자이내 입력해주세요");
+			document.getElementById("passwd").focus();
+			return false;
+		}//if end
+	
+		let message="첨부 파일도 삭제됩니다\n계속 진행할까요?";
+		if(confirm(message)){ //확인 true, 취소 false
+			return true; //서버로 전송
+		}else{
+			return false;
+		}//if end
+	}//pwCheck2() end
+	
+
+
 }//pdsCheck() end
