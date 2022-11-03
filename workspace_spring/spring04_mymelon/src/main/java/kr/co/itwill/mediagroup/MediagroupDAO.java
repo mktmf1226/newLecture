@@ -117,5 +117,59 @@ public class MediagroupDAO {
 	}//list2() end
 	
 	
+	public int delete(int mediagroupno) {
+		int cnt=0;
+		try {
+			sql=new StringBuilder();
+			sql.append(" DELETE FROM mediagroup ");
+			sql.append(" WHERE mediagroupno=? ");
+			cnt=jt.update(sql.toString(), mediagroupno);
+		} catch (Exception e) {
+			System.out.println("미디어그룹 삭제실패 : " + e);
+		}//end
+		return cnt;
+	}//delete() end
+	
+	public MediagroupDTO read(int mediagroupno){
+		MediagroupDTO dto = null;
+		try {
+			sql=new StringBuilder();
+			sql.append(" SELECT mediagroupno, title ");
+			sql.append(" FROM mediagroup ");			
+			sql.append(" WHERE mediagroupno = " + mediagroupno);
+
+			RowMapper<MediagroupDTO> rowMapper=new RowMapper<MediagroupDTO>() {
+				@Override
+				public MediagroupDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+					MediagroupDTO dto=new MediagroupDTO();
+					dto.setMediagroupno(rs.getInt("mediagroupno"));
+					dto.setTitle(rs.getString("title"));
+					return dto;
+				}//mapRow() end
+			};//rowMapper end
+			
+			//mapping a single result row to a result object via a RowMapper
+			dto=jt.queryForObject(sql.toString(), rowMapper);
+			
+		} catch (Exception e) {
+			System.out.println("미디어그룹 상세보기 실패 : " + e);
+		}//end
+		return dto;
+	}//read() end
+	
+	
+	public int update(MediagroupDTO dto) {
+		int cnt=0;
+		try {
+			sql=new StringBuilder();
+			sql.append(" UPDATE mediagroup SET title=? ");
+			sql.append(" WHERE mediagroupno=? ");
+			cnt=jt.update(sql.toString(), dto.getTitle(), dto.getMediagroupno());			
+		} catch (Exception e) {
+			System.out.println("미디어그룹수정실패 : " + e);
+		}//end
+		return cnt;
+	}//update() end
+
 	
 }//class end

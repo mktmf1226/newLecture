@@ -17,3 +17,5 @@ drop table mediagroup;
 -- 시퀀스 삭제
 drop sequence mediagroup_seq;
 
+-- 행 업데이트
+update mediagroup set title=? where mediagroupno=?

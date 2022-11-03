@@ -36,10 +36,10 @@
 		<c:forEach var="dto" items="${list}">
 			<tr>
 				<td>${dto.mediagroupno}</td>
-				<td>${dto.title}</td>
+				<td><a href="../media/list.do?mediagroupno=${dto.mediagroupno}">${dto.title}</a></td>
 				<td>
-					<input type="button" value="수정">
-					<input type="button" value="삭제">
+					<input type="button" value="수정" onclick="location.href='update.do?mediagroupno=${dto.mediagroupno}'">
+					<input type="button" value="삭제" onclick="location.href='delete.do?mediagroupno=${dto.mediagroupno}'">
 				</td>
 			</tr>
 		</c:forEach>		
@@ -59,7 +59,7 @@
 			</c:if>
 
 			<c:if test="${startPage>0}">
-				<a href="./list.do?pageNum=${startPage}">이전</a>
+				<a href="./list.do?pageNum=${startPage}">[이전]</a>
 			</c:if>
 			
 			<c:forEach var="i" begin="${startPage+1}" end="${endPage-1}">
@@ -69,11 +69,12 @@
 				</c:choose>
 			</c:forEach>
 			
-			<c:if test="${endPage<pageCount}">
+			<c:if test="${endPage<=pageCount}">
 				<a href="./list.do?pageNum=${startPage+11}">[다음]</a>
 			</c:if>
 		</div>
 	</c:if>
+	
 	
 	
 </body>
