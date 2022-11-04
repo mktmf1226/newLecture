@@ -16,7 +16,7 @@ public class MediaDTO {
 	//기본생성자, getter, setter, toString -> lombok.jar 라이브러리
 	public MediaDTO() {}
 
-	
+	/////////////////////////////////////////////////////////////////////
 	//첨부된 파일을 저장하기 위해서(createForm.jsp 참조)
 	
 	//1)스프링 파일 객체 멤버변수 선언
@@ -46,7 +46,8 @@ public class MediaDTO {
 		this.filenameMF = filenameMF;
 	}
 
-
+	//////////////////////////////////////////////////////////////////////
+	
 	public int getMediano() {
 		return mediano;
 	}

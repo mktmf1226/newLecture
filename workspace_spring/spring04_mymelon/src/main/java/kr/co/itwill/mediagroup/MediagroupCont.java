@@ -48,7 +48,15 @@ public class MediagroupCont {
 			mav.addObject("link1", link1);
 			mav.addObject("link2", link2);
 		}else {
-			mav.setViewName("redirect:/mediagroup/list.do");
+			//mav.setViewName("redirect:/mediagroup/list.do");
+			mav.setViewName("mediagroup/msgView");
+			String msg1="<p>미디어 그룹 등록 성공</p>";
+			String img="<img src='../images/success.png'>";
+			String link2="<input type='button' value='목록으로' onclick='location.href=\"list.do\"'>";
+			mav.addObject("msg1", msg1);
+			mav.addObject("img", img);
+			mav.addObject("link2", link2);
+
 		}//if end		
 		return mav;
 	}//createForm() end
